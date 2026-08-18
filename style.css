@@ -1,8 +1,4 @@
 :root {
-    /* ==============================
-       CORES
-       ============================== */
-
     --cor-fundo: #050805;
     --cor-principal: #111711;
     --cor-secundaria: #151c15;
@@ -18,23 +14,11 @@
 
     --cor-verde-escuro: #566b55;
 
-    /* ==============================
-       DIMENSÕES
-       ============================== */
-
     --raio-painel: 0px;
     --raio-elemento: 0px;
 
-    /* ==============================
-       EFEITOS
-       ============================== */
-
     --sombra-painel: 0 12px 35px rgba(0, 0, 0, 0.55);
     --transicao: 0.15s ease;
-
-    /* ==============================
-       FONTE
-       ============================== */
 
     --fonte: 'Courier New', Courier, monospace;
 }
@@ -127,6 +111,7 @@ body::before {
     text-align: center;
 
     position: relative;
+    z-index: 1;
 }
 
 
@@ -246,10 +231,6 @@ h1 {
     color: var(--cor-destaque-hover);
 
     border-color: var(--cor-destaque);
-
-    transform: none;
-
-    box-shadow: none;
 }
 
 
@@ -261,10 +242,6 @@ h1 {
     background-color: var(--cor-destaque);
 
     color: var(--cor-fundo);
-
-    transform: none;
-
-    box-shadow: none;
 }
 
 
