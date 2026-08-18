@@ -1,142 +1,360 @@
-const caixaPrincipal = document.querySelector(".caixa-principal");
-const caixaPerguntas = document.querySelector(".caixa-perguntas");
-const caixaAlternativas = document.querySelector(".caixa-alternativas");
-const caixaResultado = document.querySelector(".caixa-resultado");
-const textoResultado = document.querySelector(".texto-resultado");
+:root {
+    /* ==============================
+       CORES
+       ============================== */
 
+    --cor-fundo: #050805;
+    --cor-principal: #111711;
+    --cor-secundaria: #151c15;
 
-const perguntas = [
-    {
-        enunciado: "Você acabou de descobrir uma nova inteligência artificial capaz de conversar, criar imagens e produzir áudios extremamente realistas. Qual é sua primeira reação?",
-        alternativas: [
-            {
-                texto: "Isso pode ser perigoso.",
-                afirmacao: "Começou a observar a evolução da IA com cautela, tentando entender seus riscos e suas possíveis consequências."
-            },
-            {
-                texto: "Isso pode ser incrível.",
-                afirmacao: "Ficou interessado nas possibilidades da IA e começou a procurar maneiras de utilizá-la no cotidiano."
-            }
-        ]
-    },
+    --cor-destaque: #b8cdb5;
+    --cor-destaque-hover: #d1e3cd;
 
-    {
-        enunciado: "Durante uma aula, sua professora propõe uma pesquisa sobre Inteligência Artificial. Você precisa encontrar informações confiáveis e explicar o assunto com suas próprias palavras. Como você decide fazer isso?",
-        alternativas: [
-            {
-                texto: "Usar uma IA como ferramenta de pesquisa.",
-                afirmacao: "Aprendeu a utilizar a IA como uma ferramenta para encontrar informações e compreender assuntos que antes pareciam complicados."
-            },
-            {
-                texto: "Pesquisar por conta própria.",
-                afirmacao: "Preferiu comparar diferentes fontes e construir seu trabalho utilizando suas próprias pesquisas e conhecimentos."
-            }
-        ]
-    },
+    --cor-texto: #dce5d8;
+    --cor-texto-secundario: #aab5a7;
 
-    {
-        enunciado: "Anos depois, a IA se tornou cada vez mais presente no mercado de trabalho. Em uma discussão sobre o futuro das profissões, qual opinião representa melhor o que você pensa?",
-        alternativas: [
-            {
-                texto: "A IA pode criar novas profissões e oportunidades.",
-                afirmacao: "Passou a buscar novas oportunidades profissionais relacionadas à IA e descobriu formas de utilizar a tecnologia para desenvolver novas habilidades."
-            },
-            {
-                texto: "Precisamos proteger quem pode perder o emprego.",
-                afirmacao: "Começou a defender uma utilização mais responsável da IA e participou de iniciativas para ajudar trabalhadores a se adaptarem às novas tecnologias."
-            }
-        ]
-    },
+    --cor-borda: #667363;
+    --cor-borda-fraca: #3d493d;
 
-    {
-        enunciado: "Para um projeto importante, você precisa criar uma imagem que represente sua visão sobre o futuro da Inteligência Artificial. Qual caminho você escolhe?",
-        alternativas: [
-            {
-                texto: "Criar a imagem manualmente.",
-                afirmacao: "Aprofundou seus conhecimentos em ferramentas tradicionais de criação e passou a ajudar outras pessoas a desenvolver suas próprias habilidades artísticas."
-            },
-            {
-                texto: "Utilizar uma inteligência artificial para criar a imagem.",
-                afirmacao: "Aprendeu a utilizar ferramentas generativas para acelerar seu processo criativo e começou a ensinar outras pessoas a trabalhar com elas."
-            }
-        ]
-    },
+    --cor-verde-escuro: #566b55;
 
-    {
-        enunciado: "Em um trabalho de grupo, um colega entrega um texto completamente produzido por uma IA. O conteúdo parece bom, mas ninguém verificou se as informações estão corretas. O que você faz?",
-        alternativas: [
-            {
-                texto: "Se o texto está pronto, podemos simplesmente utilizá-lo.",
-                afirmacao: "Passou a depender cada vez mais da IA para realizar suas tarefas e começou a perceber como é fácil deixar a tecnologia pensar em seu lugar."
-            },
-            {
-                texto: "Vamos revisar o conteúdo e acrescentar nossas próprias ideias.",
-                afirmacao: "Entendeu que a IA pode ser uma excelente ferramenta, mas que suas respostas precisam ser verificadas e complementadas pelo pensamento humano."
-            }
-        ]
-    }
-];
+    /* ==============================
+       DIMENSÕES
+       ============================== */
 
+    --raio-painel: 0px;
+    --raio-elemento: 0px;
 
-let atual = 0;
-let perguntaAtual;
-let historiaFinal = "";
+    /* ==============================
+       EFEITOS
+       ============================== */
 
+    --sombra-painel: 0 12px 35px rgba(0, 0, 0, 0.55);
+    --transicao: 0.15s ease;
 
-function mostraPergunta() {
+    /* ==============================
+       FONTE
+       ============================== */
 
-    if (atual >= perguntas.length) {
-        mostraResultado();
-        return;
-    }
-
-    perguntaAtual = perguntas[atual];
-
-    caixaPerguntas.textContent = perguntaAtual.enunciado;
-    caixaAlternativas.textContent = "";
-
-    mostraAlternativas();
+    --fonte: 'Courier New', Courier, monospace;
 }
 
 
-function mostraAlternativas() {
+/* ==============================
+   RESET
+   ============================== */
 
-    for (const alternativa of perguntaAtual.alternativas) {
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        const botaoAlternativas = document.createElement("button");
 
-        botaoAlternativas.textContent = alternativa.texto;
+/* ==============================
+   BODY
+   ============================== */
 
-        botaoAlternativas.addEventListener(
-            "click",
-            () => respostaSelecionada(alternativa)
+body {
+    min-height: 100vh;
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(105, 130, 100, 0.07) 0%,
+            transparent 65%
+        ),
+        var(--cor-fundo);
+
+    color: var(--cor-texto);
+
+    font-family: var(--fonte);
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* ==============================
+   EFEITO CRT
+   ============================== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+    z-index: 999;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(190, 220, 185, 0.025) 0px,
+            rgba(190, 220, 185, 0.025) 1px,
+            transparent 1px,
+            transparent 4px
         );
 
-        caixaAlternativas.appendChild(botaoAlternativas);
+    opacity: 0.4;
+}
+
+
+/* ==============================
+   CAIXA PRINCIPAL
+   ============================== */
+
+.caixa-principal {
+    width: min(90%, 600px);
+
+    padding: 30px;
+
+    background-color: var(--cor-principal);
+
+    border: 1px solid var(--cor-borda);
+    border-radius: 0;
+
+    box-shadow: var(--sombra-painel);
+
+    text-align: center;
+
+    position: relative;
+}
+
+
+/* Linha superior */
+
+.caixa-principal::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background-color: var(--cor-destaque);
+}
+
+
+/* ==============================
+   TÍTULO
+   ============================== */
+
+h1 {
+    margin-bottom: 28px;
+
+    color: var(--cor-destaque-hover);
+
+    font-family: var(--fonte);
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+
+    line-height: 1.15;
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+
+/* ==============================
+   PERGUNTAS
+   ============================== */
+
+.caixa-perguntas {
+    margin-bottom: 24px;
+
+    color: var(--cor-texto);
+
+    font-family: var(--fonte);
+    font-size: 1.05rem;
+    font-weight: 400;
+
+    line-height: 1.6;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--cor-borda-fraca);
+
+    padding-bottom: 18px;
+}
+
+
+/* ==============================
+   ALTERNATIVAS
+   ============================== */
+
+.caixa-alternativas {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* ==============================
+   BOTÕES
+   ============================== */
+
+.caixa-alternativas button {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 12px 16px;
+
+    background-color: var(--cor-secundaria);
+    color: var(--cor-texto);
+
+    border: 1px solid var(--cor-borda-fraca);
+    border-radius: 0;
+
+    font-family: var(--fonte);
+    font-size: 15px;
+    font-weight: 400;
+
+    line-height: 1.4;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--transicao),
+        color var(--transicao),
+        border-color var(--transicao);
+}
+
+
+/* ==============================
+   HOVER
+   ============================== */
+
+.caixa-alternativas button:hover {
+    background-color: var(--cor-verde-escuro);
+
+    color: var(--cor-destaque-hover);
+
+    border-color: var(--cor-destaque);
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* ==============================
+   ACTIVE
+   ============================== */
+
+.caixa-alternativas button:active {
+    background-color: var(--cor-destaque);
+
+    color: var(--cor-fundo);
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* ==============================
+   FOCUS
+   ============================== */
+
+.caixa-alternativas button:focus-visible {
+    outline: 1px solid var(--cor-destaque);
+    outline-offset: 2px;
+}
+
+
+/* ==============================
+   RESULTADO
+   ============================== */
+
+.caixa-resultado {
+    display: none;
+
+    margin-top: 24px;
+    padding: 18px;
+
+    background-color: var(--cor-secundaria);
+
+    border: 1px solid var(--cor-borda-fraca);
+    border-left: 2px solid var(--cor-destaque);
+
+    border-radius: 0;
+
+    text-align: left;
+}
+
+.caixa-resultado.mostrar {
+    display: block;
+}
+
+.texto-resultado {
+    color: var(--cor-texto);
+
+    font-family: var(--fonte);
+    font-size: 15px;
+    font-weight: 400;
+
+    line-height: 1.6;
+}
+
+
+/* ==============================
+   RESPONSIVIDADE
+   ============================== */
+
+@media (max-width: 480px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .caixa-principal {
+        width: 100%;
+        padding: 24px 18px;
+    }
+
+    h1 {
+        margin-bottom: 22px;
+        font-size: 1.7rem;
+    }
+
+    .caixa-perguntas {
+        font-size: 1rem;
+    }
+
+    .caixa-alternativas button {
+        min-height: 46px;
+        padding: 11px 14px;
     }
 }
 
 
-function respostaSelecionada(opcaoSelecionada) {
+/* ==============================
+   REDUÇÃO DE MOVIMENTO
+   ============================== */
 
-    historiaFinal += `${opcaoSelecionada.afirmacao} `;
+@media (prefers-reduced-motion: reduce) {
 
-    atual++;
-
-    mostraPergunta();
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+    }
 }
-
-
-function mostraResultado() {
-
-    caixaPerguntas.textContent = "Em 2049...";
-
-    textoResultado.textContent = historiaFinal;
-
-    caixaAlternativas.textContent = "";
-
-    caixaResultado.classList.add("mostrar");
-}
-
-
-mostraPergunta();
